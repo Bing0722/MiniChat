@@ -7,10 +7,13 @@ class HttpConnection : public std::enable_shared_from_this<HttpConnection> {
   friend class LogicSystem;
 
 public:
-  HttpConnection(tcp::socket socket);
+  // HttpConnection(tcp::socket socket);
+  HttpConnection(boost::asio::io_context &ioc);
 
   // 启动http连接的处理过程
   void start();
+
+  tcp::socket &GetSocket();
 
 private:
   // 检查处理请求的超时情况
@@ -34,8 +37,10 @@ private:
   http::response<http::dynamic_body> response_;
 
   // 定时器判断请求是否超时
+  // 创建时开始启动
   net::steady_timer deadline_{socket_.get_executor(), std::chrono::seconds(60)};
 
+  // 获取 url
   std::string get_url_;
   std::unordered_map<std::string, std::string> get_params;
 };

@@ -1,7 +1,6 @@
 #include "LogicSystem.h"
 #include "HttpConnection.h"
-#include <boost/beast/core/ostream.hpp>
-#include <json/value.h>
+#include "VerifyGrpcClient.h"
 #include <string>
 
 // 注册一个GET请求
@@ -36,6 +35,7 @@ LogicSystem::LogicSystem() {
 
     std::cout << "receive body is " << body_str << std::endl;
 
+    // 设置响应内容
     connection->response_.set(http::field::content_type, "text/json");
 
     Json::Value root;
@@ -52,8 +52,10 @@ LogicSystem::LogicSystem() {
     }
 
     auto email = src_root["email"].asString();
+    // 通过 gRPC 调用验证服务获取验证码
+    GetVerifyRsp rsp = VerifyGrpcClient::GetInstance()->GetVerifyCode(email);
     std::cout << "email is " << email << std::endl;
-    root["error"] = 0;
+    root["error"] = rsp.error();
     root["email"] = src_root["email"];
     std::string json_str = root.toStyledString();
     beast::ostream(connection->response_.body()) << json_str << std::endl;

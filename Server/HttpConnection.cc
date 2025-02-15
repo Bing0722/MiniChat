@@ -1,8 +1,9 @@
 #include "HttpConnection.h"
 #include "LogicSystem.h"
 
-HttpConnection::HttpConnection(tcp::socket socket)
-    : socket_(std::move(socket)) {}
+// HttpConnection::HttpConnection(tcp::socket socket)
+//     : socket_(std::move(socket)) {}
+HttpConnection::HttpConnection(boost::asio::io_context &ioc) : socket_(ioc) {}
 
 void HttpConnection::start() {
   auto self = shared_from_this();
@@ -24,6 +25,8 @@ void HttpConnection::start() {
                      }
                    });
 }
+
+tcp::socket &HttpConnection::GetSocket() { return socket_; }
 
 void HttpConnection::HandleReq() {
   // 设置版本
