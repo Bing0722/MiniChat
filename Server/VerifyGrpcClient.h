@@ -1,8 +1,9 @@
 #pragma once
 
+#include "./WIN32/message.grpc.pb.h"
+#include "./WIN32/message.pb.h"
 #include "Singleton.h"
 #include "global.h"
-#include "message.grpc.pb.h"
 #include <grpcpp/grpcpp.h>
 
 using grpc::Channel;       // 与gRPC服务器连接的通道
@@ -13,7 +14,8 @@ using message::GetVerifyReq;
 using message::GetVerifyRsp;
 using message::VerifyService;
 
-class RPConPool {
+class RPConPool
+{
 public:
   RPConPool(size_t poolsize, std::string host, std::string);
   ~RPConPool();
@@ -34,7 +36,8 @@ private:
   std::condition_variable cond_;
 };
 
-class VerifyGrpcClient : public Singleton<VerifyGrpcClient> {
+class VerifyGrpcClient : public Singleton<VerifyGrpcClient>
+{
   friend class Singleton<VerifyGrpcClient>;
 
 public:

@@ -1,1 +1,4 @@
-./VerifyServer/config.json
+VerifyServer/config.json
+Server/build/*
+Server/.clang-format
+Server_WIN32/*

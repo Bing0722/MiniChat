@@ -1,6 +1,7 @@
 #include "ConfigMgr.h"
 
 ConfigMgr::ConfigMgr() {
+#ifdef __LINUX__
   // 获取当前文件路径
   boost::filesystem::path current_path = boost::filesystem::current_path();
 
@@ -10,6 +11,25 @@ ConfigMgr::ConfigMgr() {
   // 存储配置数据的树形结构
   boost::property_tree::ptree pt;
   boost::property_tree::ini_parser::read_ini(config_path.c_str(), pt);
+#elif _WIN32
+  // 获取当前文件路径
+  boost::filesystem::path current_path = boost::filesystem::current_path();
+
+  // 拼接config.ini 和当前路径
+  boost::filesystem::path config_path = current_path / "../../config.ini";
+
+  if (!boost::filesystem::exists(config_path)) {
+    std::cout << "Failed to load configuration!" << std::endl;
+    exit(1);
+  }
+
+  // 存储配置数据的树形结构
+  boost::property_tree::ptree pt;
+  boost::property_tree::ini_parser::read_ini(config_path.string(), pt);
+#else
+  std::cout << "Unkonw operating system" << std::endl;
+  exit(1);
+#endif
 
   // 读取section 信息
   for (const auto &section_pair : pt) {

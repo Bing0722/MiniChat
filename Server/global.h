@@ -14,6 +14,7 @@
 #include <json/value.h>
 #include <memory>
 #include <queue>
+#include <unordered_map>
 
 namespace beast = boost::beast;
 namespace http = beast::http;
