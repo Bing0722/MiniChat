@@ -1,8 +1,14 @@
 #include "CServer.h"
+#include "ConfigMgr.h"
 
 int main() {
+  // 读取配置文件
+  auto &gCfgMgr = ConfigMgr::Instance();
+  std::string gate_port_str = gCfgMgr["GateServer"]["Port"];
+  unsigned short gate_port = atoi(gate_port_str.c_str());
+
   try {
-    unsigned short port = static_cast<unsigned short>(1234);
+    unsigned short port = static_cast<unsigned short>(gate_port);
     // 提供一个线程用于处理IO操作
     net::io_context ioc{1};
     // 创建一个 signal_set对象用于处理特定的信号
