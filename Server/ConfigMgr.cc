@@ -7,6 +7,10 @@ ConfigMgr::ConfigMgr() {
 
   // 拼接config.ini 和当前路径
   boost::filesystem::path config_path = current_path / "config.ini";
+  if (!boost::filesystem::exists(config_path)) {
+    std::cout << "Failed to load configuration!" << std::endl;
+    exit(1);
+  }
 
   // 存储配置数据的树形结构
   boost::property_tree::ptree pt;
@@ -15,9 +19,8 @@ ConfigMgr::ConfigMgr() {
   // 获取当前文件路径
   boost::filesystem::path current_path = boost::filesystem::current_path();
 
-  // 拼接config.ini 和当前路径
+  // 拼接 config.ini 和当前路径
   boost::filesystem::path config_path = current_path / "../../config.ini";
-
   if (!boost::filesystem::exists(config_path)) {
     std::cout << "Failed to load configuration!" << std::endl;
     exit(1);

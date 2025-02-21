@@ -4,6 +4,7 @@
 #include <boost/asio.hpp>
 #include <vector>
 
+// io_context 连接池
 class AsioIOServicePool : public Singleton<AsioIOServicePool> {
   friend Singleton<AsioIOServicePool>;
 

@@ -3,8 +3,8 @@
 
 int main() {
   // 读取配置文件
-  auto &gCfgMgr = ConfigMgr::Instance();
-  std::string gate_port_str = gCfgMgr["GateServer"]["Port"];
+  auto &config = ConfigMgr::Instance();
+  std::string gate_port_str = config["GateServer"]["Port"];
   unsigned short gate_port = atoi(gate_port_str.c_str());
 
   try {

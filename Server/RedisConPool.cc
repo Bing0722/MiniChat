@@ -17,14 +17,19 @@ RedisConPool::RedisConPool(size_t poolSize, const char *host, int port,
     // 进行认证
     auto reply = (redisReply *)redisCommand(context, "AUTH %s", pass);
     if (reply->type == REDIS_REPLY_ERROR) {
-      std::cout << "认证失败" << std::endl;
+      std::cerr << "Authentication failure" << std::endl;
       freeReplyObject(reply);
       continue;
     }
 
     freeReplyObject(reply);
-    std::cout << "认证成功" << std::endl;
+    // std::cout << "Successful certification!" << std::endl;
     connections_.push(context);
+  }
+
+  if (connections_.size() == 0) {
+    std::cerr << "All redis service connections failed!" << std::endl;
+    Close(); // 通知关闭 redis服务
   }
 }
 

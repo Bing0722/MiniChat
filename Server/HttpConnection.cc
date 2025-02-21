@@ -7,23 +7,23 @@ HttpConnection::HttpConnection(boost::asio::io_context &ioc) : socket_(ioc) {}
 
 void HttpConnection::start() {
   auto self = shared_from_this();
-  http::async_read(socket_, buffer_, request_,
-                   [self](beast::error_code ec, std::size_t bytes_transferred) {
-                     try {
-                       if (ec) {
-                         std::cerr << "http read err is " << ec.what()
-                                   << std::endl;
-                         return;
-                       }
+  http::async_read(
+      socket_, buffer_, request_,
+      [self](const beast::error_code &ec, std::size_t bytes_transferred) {
+        try {
+          if (ec) {
+            std::cerr << "http read err is " << ec.what() << std::endl;
+            return;
+          }
 
-                       boost::ignore_unused(bytes_transferred);
-                       self->HandleReq();
-                       self->CheckDeadline();
+          boost::ignore_unused(bytes_transferred);
+          self->HandleReq();
+          self->CheckDeadline();
 
-                     } catch (std::exception &e) {
-                       std::cerr << "Exception is " << e.what() << std::endl;
-                     }
-                   });
+        } catch (std::exception &e) {
+          std::cerr << "Exception is " << e.what() << std::endl;
+        }
+      });
 }
 
 tcp::socket &HttpConnection::GetSocket() { return socket_; }
@@ -112,7 +112,7 @@ void HttpConnection::PreParseGetParam() {
     if (eq_pos != std::string::npos) {
       key = UrlDecode(pair.substr(0, eq_pos));
       value = UrlDecode(pair.substr(eq_pos + 1));
-      get_params[key] = value;
+      get_params_[key] = value;
     }
     query_string.erase(0, pos + 1);
   }
@@ -122,7 +122,7 @@ void HttpConnection::PreParseGetParam() {
     if (eq_pos != std::string::npos) {
       key = UrlDecode(query_string.substr(0, eq_pos));
       value = UrlDecode(query_string.substr(eq_pos + 1));
-      get_params[key] = value;
+      get_params_[key] = value;
     }
   }
 }

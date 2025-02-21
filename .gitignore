@@ -2,3 +2,5 @@ VerifyServer/config.json
 Server/build/*
 Server/.clang-format
 Server_WIN32/*
+Data/
+Server/.vscode
