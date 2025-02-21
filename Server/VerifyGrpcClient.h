@@ -1,7 +1,13 @@
 #pragma once
 
+#ifdef _WIN32
 #include "./WIN32/message.grpc.pb.h"
 #include "./WIN32/message.pb.h"
+#elif __linux__
+#include "./LINUX/message.grpc.pb.h"
+#include "./LINUX/message.pb.h"
+#endif
+
 #include "Singleton.h"
 #include "global.h"
 #include <grpcpp/grpcpp.h>
@@ -14,8 +20,7 @@ using message::GetVerifyReq;
 using message::GetVerifyRsp;
 using message::VerifyService;
 
-class RPConPool
-{
+class RPConPool {
 public:
   RPConPool(size_t poolsize, std::string host, std::string);
   ~RPConPool();
@@ -36,8 +41,7 @@ private:
   std::condition_variable cond_;
 };
 
-class VerifyGrpcClient : public Singleton<VerifyGrpcClient>
-{
+class VerifyGrpcClient : public Singleton<VerifyGrpcClient> {
   friend class Singleton<VerifyGrpcClient>;
 
 public:

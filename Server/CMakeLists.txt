@@ -42,12 +42,24 @@ elseif(WIN32)
         add_definitions(-D_WIN32_WINNT=0x0601)
     endif()
 
+    set(CMAKE_PREFIX_PATH "C:/Tools/mysql-connector-c++-9.2.0-winx64" CACHE STRING "Path to MySQL Connector C++ CMake files")
+
+    include_directories("C:/Tools/mysql-connector-c++-9.2.0-winx64/include")
+    link_directories("C:/Tools/mysql-connector-c++-9.2.0-winx64/lib64/vs14")
+
+    set(MYSQL_CONCPP_ROOT "C:/Tools/mysql-connector-c++-9.2.0-winx64")
+    set(MYSQL_CONCPP_LIBRARIES
+        ${MYSQL_CONCPP_ROOT}/lib64/debug/vs14/mysqlcppconn.lib
+        ${MYSQL_CONCPP_ROOT}/lib64/debug/vs14/mysqlcppconnx.lib
+    )
+
     find_package(Boost REQUIRED filesystem system) 
     find_package(jsoncpp CONFIG REQUIRED)
     find_package(gRPC REQUIRED)
     find_package(Protobuf REQUIRED)
     find_package(hiredis REQUIRED)
-    find_package(unofficial-mysql-connector-cpp CONFIG REQUIRED)
+    # find_package(unofficial-mysql-connector-cpp CONFIG REQUIRED)
+    # find_package(mysql-concpp REQUIRED)
 endif()
 
 # 使用 file(GLOB ...) 命令将项目目录下所有 .cc 文件（源文件）加入到 SOURCE_FILES 变量中
@@ -87,7 +99,9 @@ elseif(WIN32)
         gRPC::grpc++
         protobuf::libprotobuf
         hiredis::hiredis
-        unofficial::mysql-connector-cpp::connector
+        # unofficial::mysql-connector-cpp::connector
+        # mysql::concpp
+        ${MYSQL_CONCPP_LIBRARIES}
     )
 endif()
 

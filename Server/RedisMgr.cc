@@ -3,10 +3,10 @@
 #include "RedisConPool.h"
 
 RedisMgr::RedisMgr() {
-  auto &cfg_mgr = ConfigMgr::Instance();
-  auto host = cfg_mgr["Redis"]["Host"];
-  auto port = cfg_mgr["Redis"]["Port"];
-  auto pass = cfg_mgr["Redis"]["Pass"];
+  auto &config = ConfigMgr::Instance();
+  auto host = config["Redis"]["Host"];
+  auto port = config["Redis"]["Port"];
+  auto pass = config["Redis"]["Pass"];
   con_pool_.reset(
       new RedisConPool(5, host.c_str(), atoi(port.c_str()), pass.c_str()));
 }

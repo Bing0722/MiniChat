@@ -4,7 +4,8 @@
 
 CServer::CServer(boost::asio::io_context &ioc, unsigned short &port)
     : ioc_(ioc), acceptor_(ioc, tcp::endpoint(tcp::v4(), port)), socket_(ioc) {
-  std::cout << "Server start listening " << port << " port..." << std::endl;
+  std::cout << "Server started listening on port " << port << "..."
+            << std::endl;
 }
 
 void CServer::start() {

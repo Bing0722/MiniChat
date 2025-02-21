@@ -42,7 +42,7 @@ private:
 
   // 获取 url
   std::string get_url_;
-  std::unordered_map<std::string, std::string> get_params;
+  std::unordered_map<std::string, std::string> get_params_;
 };
 
 extern unsigned char ToHex(unsigned char x);

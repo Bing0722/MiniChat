@@ -53,9 +53,9 @@ void RPConPool::Close() {
 }
 
 VerifyGrpcClient::VerifyGrpcClient() {
-  auto &cfg_mgr = ConfigMgr::Instance();
-  std::string host = cfg_mgr["VerifyServer"]["Host"];
-  std::string port = cfg_mgr["VerifyServer"]["Port"];
+  auto &config = ConfigMgr::Instance();
+  std::string host = config["VerifyServer"]["Host"];
+  std::string port = config["VerifyServer"]["Port"];
   // reset 方法 释放原来管理的对象, 并开始管理传入的新对象
   pool_.reset(new RPConPool(5, host, port));
 
@@ -71,10 +71,15 @@ GetVerifyRsp VerifyGrpcClient::GetVerifyCode(std::string email) {
   ClientContext context;
   GetVerifyRsp reply;
   GetVerifyReq request;
+
   request.set_email(email);
 
   // 从连接池中取出对象
   auto stub = pool_->GetConnection();
+  if (stub == nullptr) {
+    reply.set_error(ErrorCodes::RPC_FAILD);
+    return reply;
+  }
 
   Status status = stub->GetVerifyCode(&context, request, &reply);
 
