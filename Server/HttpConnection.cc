@@ -5,7 +5,7 @@
 //     : socket_(std::move(socket)) {}
 HttpConnection::HttpConnection(boost::asio::io_context &ioc) : socket_(ioc) {}
 
-void HttpConnection::start() {
+void HttpConnection::Start() {
   auto self = shared_from_this();
   http::async_read(
       socket_, buffer_, request_,

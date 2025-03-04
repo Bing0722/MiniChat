@@ -11,7 +11,10 @@ RedisMgr::RedisMgr() {
       new RedisConPool(5, host.c_str(), atoi(port.c_str()), pass.c_str()));
 }
 
-RedisMgr::~RedisMgr() { Close(); }
+RedisMgr::~RedisMgr() {
+  Close();
+  std::cout << "The Redis server is being destroyed..." << std::endl;
+}
 
 bool RedisMgr::Get(const std::string &key, std::string &value) {
   auto connect = con_pool_->GetConncetion();

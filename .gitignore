@@ -1,6 +1,8 @@
 VerifyServer/config.json
 Server/build/*
-Server/.clang-format
-Server_WIN32/*
 Data/
 Server/.vscode
+StatusServer/build/*
+ChatServer1/build/*
+ChatServer2/build/*
+server_rust/target/*

@@ -8,7 +8,7 @@ CServer::CServer(boost::asio::io_context &ioc, unsigned short &port)
             << std::endl;
 }
 
-void CServer::start() {
+void CServer::Start() {
   auto self = shared_from_this();
 
   auto &io_context = AsioIOServicePool::GetInstance()->GetIOService();
@@ -22,7 +22,7 @@ void CServer::start() {
           // 出错则放弃这个连接, 继续监听新连接
           if (ec) {
             // 继续监听
-            self->start();
+            self->Start();
             return;
           }
 
@@ -30,13 +30,13 @@ void CServer::start() {
           // 当 socket_传给 HttpConnection后 CServer 就会创建新的 socket_
           // std::make_shared<HttpConnection>(std::move(self->socket_))->start();
 
-          new_con->start();
+          new_con->Start();
 
           // 继续监听
-          self->start();
+          self->Start();
         } catch (std::exception &e) {
           std::cerr << "Exception is " << e.what() << std::endl;
-          self->start();
+          self->Start();
         }
       });
 }
