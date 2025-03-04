@@ -6,3 +6,4 @@ StatusServer/build/*
 ChatServer1/build/*
 ChatServer2/build/*
 server_rust/target/*
+Client/MiniChat/build/
