@@ -35,7 +35,10 @@ struct SectionInfo {
 
 class ConfigMgr {
 public:
-  ~ConfigMgr() { config_map_.clear(); }
+  ~ConfigMgr() {
+    config_map_.clear();
+    std::cout << "The ConfigMgr instance is being destrotyed..." << std::endl;
+  }
 
   // 线程安全 单例
   static ConfigMgr &Instance() {

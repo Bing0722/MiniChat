@@ -11,7 +11,7 @@ public:
   HttpConnection(boost::asio::io_context &ioc);
 
   // 启动http连接的处理过程
-  void start();
+  void Start();
 
   tcp::socket &GetSocket();
 

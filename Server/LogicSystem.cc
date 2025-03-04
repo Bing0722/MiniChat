@@ -2,6 +2,7 @@
 #include "HttpConnection.h"
 #include "MysqlMgr.h"
 #include "RedisMgr.h"
+#include "StatusGrpcClient.h"
 #include "VerifyGrpcClient.h"
 
 // 注册一个GET请求
@@ -74,7 +75,7 @@ LogicSystem::LogicSystem() {
     }
 
     auto email = src_root["email"].asString();
-    // 通过 gRPC 调用验证服务获取验证码
+    // !!! 通过 gRPC 调用远程验证服务 获取验证码
     GetVerifyRsp rsp = VerifyGrpcClient::GetInstance()->GetVerifyCode(email);
     std::cout << "email is " << email << std::endl;
     root["error"] = rsp.error();
@@ -120,9 +121,9 @@ LogicSystem::LogicSystem() {
 
     // 查找redis 中email对应的验证码是否合理
     std::string verify_code;
-
     bool get_verify = RedisMgr::GetInstance()->Get(
         CODEPREFIX + src_root["email"].asString(), verify_code);
+
     if (!get_verify) {
       std::cout << "get verify code expired!" << std::endl;
       root["error"] = ErrorCodes::VERIFY_EXPIRED;
@@ -262,6 +263,7 @@ LogicSystem::LogicSystem() {
 
     UserInfo userinfo;
 
+    // 通过 Mysql 数据库 查询密码
     bool pass_valid =
         MysqlMgr::GetInstance()->CheckPasswd(name, pass, userinfo);
 
@@ -273,9 +275,8 @@ LogicSystem::LogicSystem() {
       return true;
     }
 
-    // TODO StatusServer 服务
-    // 查询 StatusServer 找到合适的连接
-    auto reply = StatusGrpcClient::GetInstance()->GetChatServer(userinfo, uid);
+    // !!! 通过 gRPC 远程调用服务 查询 StatusServer 找到合适的连接
+    auto reply = StatusGrpcClient::GetInstance()->GetChatServer(userinfo.uid);
     if (reply.error()) {
       std::cout << "Grpc get chat server failed, error is " << reply.error()
                 << std::endl;
@@ -287,11 +288,13 @@ LogicSystem::LogicSystem() {
 
     std::cout << "Succeed to load user info uid is " << userinfo.uid
               << std::endl;
+
+    // TODO 添加 token 和 host
     root["error"] = 0;
     root["user"] = name;
     root["uid"] = userinfo.uid;
-    root["token"] = userinfo.token();
-    root["host"] = userinfo.host();
+    // root["token"] = userinfo.token();
+    // root["host"] = userinfo.host();
     std::string json_str = root.toStyledString();
     beast::ostream(connection->response_.body()) << json_str << std::endl;
     return true;

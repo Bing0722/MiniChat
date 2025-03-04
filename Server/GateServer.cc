@@ -1,13 +1,19 @@
 #include "CServer.h"
 #include "ConfigMgr.h"
+#include "MysqlMgr.h"
+#include "RedisMgr.h"
 
 int main() {
-  // 读取配置文件
-  auto &config = ConfigMgr::Instance();
-  std::string gate_port_str = config["GateServer"]["Port"];
-  unsigned short gate_port = atoi(gate_port_str.c_str());
-
   try {
+    // 开启Redis 和 Mysql 服务
+    MysqlMgr::GetInstance();
+    RedisMgr::GetInstance();
+
+    // 读取配置文件
+    auto &config = ConfigMgr::Instance();
+    std::string gate_port_str = config["GateServer"]["Port"];
+    unsigned short gate_port = atoi(gate_port_str.c_str());
+
     unsigned short port = static_cast<unsigned short>(gate_port);
     // 提供一个线程用于处理IO操作
     net::io_context ioc{1};
@@ -24,7 +30,7 @@ int main() {
           ioc.stop();
         });
     // 创建一个 CServer类的共享指针
-    std::make_shared<CServer>(ioc, port)->start();
+    std::make_shared<CServer>(ioc, port)->Start();
     // 进入时间循环 等待异步操作
     ioc.run();
   } catch (std::exception const &e) {

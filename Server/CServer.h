@@ -7,7 +7,7 @@ public:
   CServer(boost::asio::io_context &ioc, unsigned short &port);
 
   // 启动服务器
-  void start();
+  void Start();
 
 private:
   tcp::acceptor acceptor_;

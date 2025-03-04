@@ -2,7 +2,9 @@
 
 MysqlMgr::MysqlMgr() {}
 
-MysqlMgr::~MysqlMgr() {}
+MysqlMgr::~MysqlMgr() {
+  std::cout << "The Mysql server is being destroyed..." << std::endl;
+}
 
 int MysqlMgr::RegUser(const std::string &name, const std::string &email,
                       const std::string &pass) {
