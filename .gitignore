@@ -1,9 +1,18 @@
+# 认证配置
 VerifyServer/config.json
-Server/build/*
-Data/
+verify_server_rust/config.json
+
+# vscode 配置
 Server/.vscode
+
+# 数据
+Data/
+
+# 运行文件
+Server/build/*
 StatusServer/build/*
 ChatServer1/build/*
 ChatServer2/build/*
-server_rust/target/*
 Client/MiniChat/build/
+server_rust/target/*
+verify_server_rust/target/*

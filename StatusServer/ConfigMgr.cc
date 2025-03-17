@@ -1,7 +1,7 @@
 #include "ConfigMgr.h"
 
 ConfigMgr::ConfigMgr() {
-#ifdef __LINUX__
+#ifdef __linux__
   // 获取当前文件路径
   boost::filesystem::path current_path = boost::filesystem::current_path();
 

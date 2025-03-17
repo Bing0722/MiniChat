@@ -1,7 +1,13 @@
 #pragma once
 
+#ifdef _WIN32
 #include "./WIN32/message.grpc.pb.h"
 #include "./WIN32/message.pb.h"
+#elif __linux__
+#include "./LINUX/message.grpc.pb.h"
+#include "./LINUX/message.pb.h"
+#endif
+
 #include <grpcpp/grpcpp.h>
 
 using grpc::Server;        // gRPC 服务器类

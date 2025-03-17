@@ -1,22 +1,22 @@
 #pragma once
 
-#include "CSession.h"
 #include <boost/asio.hpp>
 #include <map>
 #include <memory>
 #include <mutex>
 
+#include "CSession.h"
+
 using boost::asio::ip::tcp;
 
 class CServer {
-public:
+ public:
   CServer(boost::asio::io_context &ioc, short port);
   ~CServer();
   void ClearSession(std::string);
 
-private:
-  void HandleAccept(std::shared_ptr<CSession>,
-                    const boost::system::error_code &error);
+ private:
+  void HandleAccept(std::shared_ptr<CSession>, const boost::system::error_code &error);
 
   void StartAccept();
 
